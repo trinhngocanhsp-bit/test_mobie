@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Demo Sơ đồ lớp - Mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: #f1f5f9; padding: 8px; color: #0f172a; font-size: 14px; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* Header demo */
+.demo-header {
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.demo-header h1 { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+.demo-header p { font-size: 0.75rem; opacity: 0.9; }
+
+/* Chọn chế độ xem */
+.mode-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.mode-btn {
+    padding: 10px;
+    border: 1.5px solid #cbd5e1;
+    background: #fff;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    color: #334155;
+}
+.mode-btn.active {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: #fff;
+    border-color: #1e40af;
+}
+
+/* Container sơ đồ */
+.seating-wrap {
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+.seating-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* WRAPPER 4 cột (desktop) hoặc 2x2 (mobile) */
+.seating-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.col-group {
+    flex: 1 1 150px;
+    min-width: 150px;
+    padding: 8px;
+    border-radius: 10px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 4 màu tổ giống code */
+.group-tto-1 { border: 2.5px solid #ca8a04 !important; background: #fef08a !important; }
+.group-tto-2 { border: 2.5px solid #d97706 !important; background: #fed7aa !important; }
+.group-tto-3 { border: 2.5px solid #475569 !important; background: #cbd5e1 !important; }
+.group-tto-4 { border: 2.5px solid #16a34a !important; background: #bbf7d0 !important; }
+
+.group-title {
+    text-align: center;
+    font-weight: 900;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding: 4px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Ghế ngồi */
+.seat-row {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.seat-box {
+    position: relative;
+    margin-top: 6px;
+    border: 1.5px solid #94a3b8;
+    width: 100%;
+    min-width: 65px;
+    max-width: 80px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 6px;
+    padding: 2px;
+}
+.seat-box.empty {
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    opacity: 0.6;
+}
+
+.seat-name {
+    text-align: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    line-height: 1.15;
+    width: 100%;
+    padding: 0 2px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+
+/* Badge chức vụ */
+.role-badge {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: #fff;
+    background: #ef4444;
+    border-radius: 10px;
+    padding: 1px 5px;
+    font-weight: 800;
+    white-space: nowrap;
+    z-index: 5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.role-badge.bt { background: #8b5cf6; }
+.role-badge.lp { background: #0891b2; }
+.role-badge.tt { background: #dc2626; }
+.role-badge.sd { background: #f59e0b; }
+
+/* Bảng lớp */
+.board-bar {
+    margin-top: 12px;
+    text-align: center;
+}
+.board-bar > div {
+    display: inline-block;
+    min-width: 240px;
+    background: #1e3a8a;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+/* ====== MOBILE ====== */
+@media (max-width: 700px) {
+    .col-group {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+        max-width: calc(50% - 4px);
+        padding: 6px;
+    }
+    .group-title {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+        padding: 3px;
+    }
+    .seat-box {
+        height: 42px;
+        margin-top: 5px;
+    }
+    .seat-name {
+        font-size: 0.52rem;
+    }
+    .role-badge {
+        font-size: 0.48rem;
+        padding: 1px 4px;
+        top: -6px;
+    }
+    .board-bar > div {
+        min-width: 200px;
+        font-size: 0.78rem;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .seat-box { height: 38px; }
+    .seat-name { font-size: 0.48rem; }
+    .col-group { padding: 4px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="demo-header">
+        <h1>DEMO SƠ ĐỒ LỚP — MOBILE</h1>
+        <p>Bấm nút bên dưới để xem 2 kiểu hiển thị</p>
+    </div>
+
+    <div class="mode-switch">
+        <button class="mode-btn active" onclick="setMode('4col')">4 cột (cũ)</button>
+        <button class="mode-btn" onclick="setMode('2x2')">2×2 (mobile)</button>
+    </div>
+
+    <div class="seating-wrap">
+        <div class="seating-title">SƠ ĐỒ VỊ TRÍ NGỒI</div>
+        <div class="seating-grid" id="seatingGrid"></div>
+        <div class="board-bar">
+            <div>BẢNG LỚP</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Dữ liệu mẫu
+    const STUDENTS = [
+        "Nguyễn Huyền Anh", "Hoàng Trung Hiếu", "Dương Ngọc Nhi", "Dương Ngọc Sơn", "Lê Minh Công",
+        "Nguyễn Thị Huyền Trang", "Dương Nguyễn Phương Anh", "Triệu Gia Bảo", "Nguyễn Duy Biên",
+        "Nguyễn Văn Dũng", "Nguyễn Văn Duy", "Tạ Văn Duy", "Nguyễn Văn Đồng", "Tạ Trung Đức",
+        "Hoàng Thị Thu Hằng", "Nguyễn Thị Thu Hiền", "Giáp Thị Ngọc Huệ", "Lê Ngọc Huy",
+        "Nguyễn Thị Khánh Huyền", "Lê Ngọc Khánh", "Dương Anh Linh", "Phạm Khánh Linh",
+        "Lê Thị Quỳnh Mai", "Thân Đức Mạnh", "Lê Thị Phương Minh", "Giáp Thị Trà My",
+        "Nguyễn Hoàng My", "Nguyễn Hoàng Vân Ngọc", "Thân Thị Tuyết Nhung", "Nguyễn Thị Hồng Nhung",
+        "Ninh Nguyễn Diệu Oanh", "Dương Thanh Phong", "Đàm Tuấn Phong", "Nguyễn Hồng Phong",
+        "Nguyễn Đăng Thiên Phú", "Nguyễn Đức Quảng", "Nguyễn Danh Sinh", "Nguyễn Đình Thanh",
+        "Chu Hoài Thương", "Nguyễn Việt Tiến", "Lâm Thị Trang", "Đoàn Thị Quỳnh Trang",
+        "Thân Thị Ánh Tuyết", "Giáp Lâm Vũ", "Chúc Thị Phương Anh"
+    ];
+
+    // Chức vụ của 1 số HS
+    const POSITIONS = {
+        1: 'Lớp trưởng',
+        5: 'Tổ trưởng',
+        8: 'Bí thư',
+        11: 'Tổ trưởng',
+        17: 'Sao đỏ',
+        20: 'Tổ trưởng',
+        34: 'Tổ trưởng'
+    };
+
+    // Sơ đồ 4 cột (mặc định)
+    const COLS_4x12 = {
+        1: [1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45],
+        2: [2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46],
+        3: [3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47],
+        4: [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48]
+    };
+
+    let currentMode = '4col';
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        render();
+    }
+
+    function getRoleClass(role) {
+        if (role === 'Lớp trưởng' || role === 'Bí thư') return 'bt';
+        if (role === 'Lớp phó') return 'lp';
+        if (role === 'Tổ trưởng') return 'tt';
+        if (role === 'Sao đỏ' || role === 'Giữ SĐB') return 'sd';
+        return '';
+    }
+
+    function renderSeat(stt) {
+        if (!stt) {
+            return '<div class="seat-box empty"><div class="seat-name">Trống</div></div>';
+        }
+        const name = STUDENTS[stt - 1] || '';
+        const role = POSITIONS[stt] || '';
+        const roleClass = getRoleClass(role);
+        const badge = role ? `<div class="role-badge ${roleClass}">${role}</div>` : '';
+        return `<div class="seat-box">${badge}<div class="seat-name">${name}</div></div>`;
+    }
+
+    function renderCol(title, cls, positions) {
+        let seats = '';
+        for (let i = 0; i < positions.length; i += 2) {
+            seats += '<div class="seat-row">';
+            seats += renderSeat(positions[i]);
+            if (positions[i + 1]) seats += renderSeat(positions[i + 1]);
+            seats += '</div>';
+        }
+        return `<div class="col-group ${cls}">
+            <div class="group-title">${title}</div>
+            ${seats}
+        </div>`;
+    }
+
+    function render() {
+        const grid = document.getElementById('seatingGrid');
+        if (currentMode === '4col') {
+            // 4 cột dọc như cũ
+            let html = '';
+            for (let c = 1; c <= 4; c++) {
+                html += renderCol('Tổ ' + c, 'group-tto-' + c, COLS_4x12[c]);
+            }
+            grid.innerHTML = html;
+        } else {
+            // 2x2 — gộp 2 tổ thành 1 khối lớn để tự nhiên wrap
+            let html = '';
+            for (let c = 1; c <= 4; c++) {
+                html += renderCol('Tổ ' + c, 'group-tto-' + c, COLS_4x12[c]);
+            }
+            grid.innerHTML = html;
+        }
+    }
+
+    render();
+</script>
+</body>
+</html>
