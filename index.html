@@ -3,341 +3,756 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Demo Sơ đồ lớp - Mobile</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Sổ Chủ Nhiệm Điện Tử — Demo Mobile</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', sans-serif; -webkit-tap-highlight-color: transparent; }
-body { background: #f1f5f9; padding: 8px; color: #0f172a; font-size: 14px; }
-.container { max-width: 1200px; margin: 0 auto; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Header demo */
-.demo-header {
-    background: linear-gradient(135deg, #1e40af, #2563eb);
+:root {
+    --blue-50:  #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --amber-400: #fbbf24;
+    --amber-500: #f59e0b;
+    --pink-500:  #ec4899;
+    --pink-600:  #db2777;
+    --green-500: #10b981;
+    --gray-50:   #f8fafc;
+    --gray-100:  #f1f5f9;
+    --gray-200:  #e2e8f0;
+    --gray-300:  #cbd5e1;
+    --gray-500:  #64748b;
+    --gray-700:  #334155;
+    --gray-900:  #0f172a;
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.10);
+    --shadow-blue: 0 6px 20px rgba(37,99,235,0.25);
+}
+
+html { font-size: 16px; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
+    min-height: 100vh;
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--gray-50);
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 40px rgba(30,64,175,0.10);
+}
+
+@media (max-width: 480px) {
+    body { background: var(--gray-50); }
+    .app-container { max-width: 100%; box-shadow: none; }
+}
+
+/* ============ HEADER ============ */
+.app-header {
+    position: relative;
+    background: linear-gradient(135deg, #60a5fa 0%, #2563eb 50%, #1e40af 100%);
+    padding: 22px 16px 26px;
+    overflow: hidden;
+    border-radius: 0 0 24px 24px;
     color: #fff;
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-bottom: 10px;
     text-align: center;
 }
-.demo-header h1 { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
-.demo-header p { font-size: 0.75rem; opacity: 0.9; }
 
-/* Chọn chế độ xem */
-.mode-switch {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-.mode-btn {
-    padding: 10px;
-    border: 1.5px solid #cbd5e1;
-    background: #fff;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-family: inherit;
-    color: #334155;
-}
-.mode-btn.active {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: #fff;
-    border-color: #1e40af;
+.app-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 25%, rgba(255,255,255,0.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(255,255,255,0.12) 0%, transparent 40%);
+    pointer-events: none;
 }
 
-/* Container sơ đồ */
-.seating-wrap {
+.header-deco {
+    position: absolute;
+    font-size: 4.5rem;
+    opacity: 0.9;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    line-height: 1;
+}
+.header-deco.plane { left: 6px; top: 10px; font-size: 1.8rem; transform: rotate(-15deg); }
+.header-deco.books { right: -8px; bottom: 4px; }
+.header-deco.leaf  { left: -8px; bottom: -4px; font-size: 3.5rem; opacity: 0.7; }
+
+.header-ribbon {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
     background: #fff;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 10px;
+    padding: 8px 22px;
+    border-radius: 50px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     margin-bottom: 12px;
-}
-.seating-title {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #1e3a8a;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #e2e8f0;
+    transform: rotate(-1deg);
 }
 
-/* WRAPPER 4 cột (desktop) hoặc 2x2 (mobile) */
-.seating-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-}
-
-.col-group {
-    flex: 1 1 150px;
-    min-width: 150px;
-    padding: 8px;
-    border-radius: 10px;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 4 màu tổ giống code */
-.group-tto-1 { border: 2.5px solid #ca8a04 !important; background: #fef08a !important; }
-.group-tto-2 { border: 2.5px solid #d97706 !important; background: #fed7aa !important; }
-.group-tto-3 { border: 2.5px solid #475569 !important; background: #cbd5e1 !important; }
-.group-tto-4 { border: 2.5px solid #16a34a !important; background: #bbf7d0 !important; }
-
-.group-title {
-    text-align: center;
+.header-ribbon h1 {
+    font-size: 1.15rem;
     font-weight: 900;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    padding: 4px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.05);
+    color: var(--blue-700);
+    letter-spacing: -0.02em;
 }
 
-/* Ghế ngồi */
-.seat-row {
-    display: flex;
-    gap: 4px;
-    justify-content: center;
+.header-info { position: relative; z-index: 2; margin-top: 4px; }
+
+.header-class {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.15);
     margin-bottom: 4px;
 }
 
-.seat-box {
+.header-gv {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 10px;
+}
+
+.header-week-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.app-main { padding: 14px 12px 24px; }
+
+/* ============ TAB CARDS ============ */
+.tabs-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+    margin-top: -14px;
     position: relative;
-    margin-top: 6px;
-    border: 1.5px solid #94a3b8;
-    width: 100%;
-    min-width: 65px;
-    max-width: 80px;
-    height: 48px;
+    z-index: 3;
+}
+
+.tab-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 12px 8px;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    text-align: center;
+}
+
+.tab-card:active { transform: scale(0.97); }
+.tab-card.active { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+.tab-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: currentColor;
+}
+
+.tab-card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    border-radius: 6px;
-    padding: 2px;
-}
-.seat-box.empty {
-    background: #f8fafc;
-    border: 1px dashed #94a3b8;
-    opacity: 0.6;
+    margin: 4px auto 8px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    line-height: 1;
 }
 
-.seat-name {
-    text-align: center;
-    font-size: 0.58rem;
-    font-weight: 700;
-    line-height: 1.15;
-    width: 100%;
-    padding: 0 2px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    word-break: break-word;
+.tab-card-title {
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 3px;
 }
 
-/* Badge chức vụ */
-.role-badge {
+.tab-card-sub {
+    font-size: 0.62rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.tab-card-num {
     position: absolute;
-    top: -7px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.5rem;
-    color: #fff;
-    background: #ef4444;
-    border-radius: 10px;
-    padding: 1px 5px;
-    font-weight: 800;
-    white-space: nowrap;
-    z-index: 5;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-}
-.role-badge.bt { background: #8b5cf6; }
-.role-badge.lp { background: #0891b2; }
-.role-badge.tt { background: #dc2626; }
-.role-badge.sd { background: #f59e0b; }
-
-/* Bảng lớp */
-.board-bar {
-    margin-top: 12px;
-    text-align: center;
-}
-.board-bar > div {
-    display: inline-block;
-    min-width: 240px;
-    background: #1e3a8a;
-    color: #fff;
-    padding: 8px 16px;
+    top: 6px;
+    left: 6px;
+    width: 20px;
+    height: 20px;
     border-radius: 6px;
-    font-weight: 800;
+    background: currentColor;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-card[data-tab="home"]  { color: var(--amber-500); }
+.tab-card[data-tab="home"]  .tab-card-title { color: #92400e; }
+.tab-card[data-tab="home"]  .tab-card-icon  { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+.tab-card[data-tab="input"] { color: var(--pink-500); }
+.tab-card[data-tab="input"] .tab-card-title { color: #9d174d; }
+.tab-card[data-tab="input"] .tab-card-icon  { background: linear-gradient(135deg, #f472b6, #ec4899); }
+
+.tab-card[data-tab="admin"] { color: var(--blue-500); }
+.tab-card[data-tab="admin"] .tab-card-title { color: #1e40af; }
+.tab-card[data-tab="admin"] .tab-card-icon  { background: linear-gradient(135deg, #60a5fa, #2563eb); }
+
+/* ============ PILLS ============ */
+.pills-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.pills-nav::-webkit-scrollbar { display: none; }
+
+.pill {
+    flex-shrink: 0;
+    padding: 9px 16px;
+    border-radius: 22px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1.5px solid var(--gray-200);
+    background: #fff;
+    color: var(--gray-700);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+}
+
+.pill.active {
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--shadow-blue);
+}
+
+.pill:active { transform: scale(0.97); }
+
+/* ============ CONTENT CARD ============ */
+.content-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 12px;
+    border: 1px solid var(--gray-100);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.card-head-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #60a5fa, #2563eb);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    line-height: 1;
+}
+
+.card-head-text h3 {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+}
+
+.card-head-text p {
+    font-size: 0.72rem;
+    color: var(--gray-500);
+    font-weight: 500;
+}
+
+/* ============ FORM ============ */
+.form-group { margin-bottom: 12px; }
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+}
+
+.input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrap .input-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 0.95rem;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 1;
+}
+
+.input-wrap select,
+.input-wrap input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
     font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-/* ====== MOBILE ====== */
-@media (max-width: 700px) {
-    .col-group {
-        flex: 1 1 calc(50% - 4px);
-        min-width: 0;
-        max-width: calc(50% - 4px);
-        padding: 6px;
-    }
-    .group-title {
-        font-size: 0.7rem;
-        margin-bottom: 6px;
-        padding: 3px;
-    }
-    .seat-box {
-        height: 42px;
-        margin-top: 5px;
-    }
-    .seat-name {
-        font-size: 0.52rem;
-    }
-    .role-badge {
-        font-size: 0.48rem;
-        padding: 1px 4px;
-        top: -6px;
-    }
-    .board-bar > div {
-        min-width: 200px;
-        font-size: 0.78rem;
-        padding: 6px 12px;
-    }
+.input-wrap select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 36px;
 }
 
-@media (max-width: 420px) {
-    .seat-box { height: 38px; }
-    .seat-name { font-size: 0.48rem; }
-    .col-group { padding: 4px; }
+.input-wrap select:focus,
+.input-wrap input:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+/* ============ BUTTON ============ */
+.btn {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s, box-shadow 0.2s;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
+    color: #fff;
+    box-shadow: var(--shadow-blue);
+}
+
+.btn-amber {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(245,158,11,0.3);
+}
+
+.btn-pink {
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(236,72,153,0.3);
+}
+
+/* ============ EMPTY STATE ============ */
+.empty-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 32px 20px;
+    text-align: center;
+    border: 1.5px dashed var(--gray-300);
+    color: var(--gray-500);
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--blue-50);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    border: 2px solid var(--blue-100);
+    line-height: 1;
+}
+
+.empty-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+/* ============ SCREEN ============ */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.placeholder-box {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 40px 20px;
+    text-align: center;
+    border: 1.5px dashed var(--gray-300);
+    color: var(--gray-500);
+}
+
+.placeholder-box .emoji {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.placeholder-box h4 {
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+}
+
+.placeholder-box p {
+    font-size: 0.78rem;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 12px;
+    font-size: 0.7rem;
+    color: var(--gray-500);
+    font-weight: 600;
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
 
-    <div class="demo-header">
-        <h1>DEMO SƠ ĐỒ LỚP — MOBILE</h1>
-        <p>Bấm nút bên dưới để xem 2 kiểu hiển thị</p>
-    </div>
+    <!-- ============ HEADER ============ -->
+    <header class="app-header">
+        <span class="header-deco plane">✈️</span>
+        <span class="header-deco leaf">🌿</span>
+        <span class="header-deco books">📚</span>
 
-    <div class="mode-switch">
-        <button class="mode-btn active" onclick="setMode('4col')">4 cột (cũ)</button>
-        <button class="mode-btn" onclick="setMode('2x2')">2×2 (mobile)</button>
-    </div>
-
-    <div class="seating-wrap">
-        <div class="seating-title">SƠ ĐỒ VỊ TRÍ NGỒI</div>
-        <div class="seating-grid" id="seatingGrid"></div>
-        <div class="board-bar">
-            <div>BẢNG LỚP</div>
+        <div class="header-ribbon">
+            <h1>🎓 Sổ Chủ Nhiệm Điện Tử</h1>
         </div>
-    </div>
+
+        <div class="header-info">
+            <div class="header-class">👥 Lớp 11A5 — Năm học 2026-2027</div>
+            <div class="header-gv">GVCN: Trịnh Ngọc Ánh — THPT Tân Yên số 2</div>
+            <div class="header-week-pill">📅 Tuần 3 (21/9 - 27/9/2026)</div>
+        </div>
+    </header>
+
+    <main class="app-main">
+
+        <!-- ============ 3 TAB CARDS ============ -->
+        <div class="tabs-row" id="tabsRow">
+            <div class="tab-card active" data-tab="home" onclick="switchTab('home', this)">
+                <div class="tab-card-num">1</div>
+                <div class="tab-card-icon">🏠</div>
+                <div class="tab-card-title">Trang chủ</div>
+                <div class="tab-card-sub">Xem thống tin</div>
+            </div>
+            <div class="tab-card" data-tab="input" onclick="switchTab('input', this)">
+                <div class="tab-card-num">2</div>
+                <div class="tab-card-icon">📋</div>
+                <div class="tab-card-title">Nhập liệu</div>
+                <div class="tab-card-sub">Chấm điểm</div>
+            </div>
+            <div class="tab-card" data-tab="admin" onclick="switchTab('admin', this)">
+                <div class="tab-card-num">3</div>
+                <div class="tab-card-icon">🛡️</div>
+                <div class="tab-card-title">Quản trị</div>
+                <div class="tab-card-sub">GVCN</div>
+            </div>
+        </div>
+
+        <!-- ============ SCREEN: TRANG CHỦ ============ -->
+        <div class="screen active" id="screen-home">
+
+            <nav class="pills-nav">
+                <button class="pill active" onclick="switchPill('lookup', this)">🔍 Tra cứu cá nhân</button>
+                <button class="pill" onclick="switchPill('class', this)">👥 Tra cứu lớp</button>
+                <button class="pill" onclick="switchPill('tkb', this)">📅 Thời khóa biểu</button>
+                <button class="pill" onclick="switchPill('schedule', this)">🔔 Lịch</button>
+            </nav>
+
+            <!-- Screen: Tra cứu cá nhân -->
+            <div class="pill-screen" id="pill-lookup">
+                <div class="content-card">
+                    <div class="card-head">
+                        <div class="card-head-icon">👤</div>
+                        <div class="card-head-text">
+                            <h3>Tra cứu cá nhân</h3>
+                            <p>Xem kết quả thi đua của 1 học sinh</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🎓 Chọn học sinh</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">👤</span>
+                            <select>
+                                <option>STT 1 - Nguyễn Huyền Anh</option>
+                                <option>STT 2 - Hoàng Trung Hiếu</option>
+                                <option>STT 3 - Dương Ngọc Nhi</option>
+                                <option>STT 4 - Dương Ngọc Sơn</option>
+                                <option>STT 5 - Lê Minh Công</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📅 Chọn kỳ</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📅</span>
+                            <select>
+                                <option>Theo Tuần</option>
+                                <option>Theo Tháng</option>
+                                <option>Học Kỳ 1</option>
+                                <option>Học Kỳ 2</option>
+                                <option>Cả Năm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="doLookup()">🔍 XEM KẾT QUẢ</button>
+                </div>
+
+                <div class="empty-card" id="emptyLookup">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-text">Chưa có kết quả tra cứu</div>
+                </div>
+
+                <div class="content-card" id="lookupResult" style="display:none;">
+                    <div class="card-head">
+                        <div class="card-head-icon" style="background:linear-gradient(135deg,#10b981,#059669);">📈</div>
+                        <div class="card-head-text">
+                            <h3>Kết quả tuần 3</h3>
+                            <p>Nguyễn Huyền Anh — Tổng: 130đ</p>
+                        </div>
+                    </div>
+                    <div style="font-size:0.82rem;line-height:1.8;color:var(--gray-700);">
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100);">
+                            <span>Điểm gốc</span><strong>100đ</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100);">
+                            <span>Điểm chức vụ</span><strong style="color:#16a34a;">+30đ</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:10px 8px;font-weight:900;color:#166534;background:#f0fdf4;margin-top:6px;border-radius:6px;">
+                            <span>TỔNG ĐIỂM</span><span>130đ</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top:12px;" onclick="closeLookup()">✖ Đóng kết quả</button>
+                </div>
+            </div>
+
+            <!-- Screen: Tra cứu lớp -->
+            <div class="pill-screen" id="pill-class" style="display:none;">
+                <div class="placeholder-box">
+                    <span class="emoji">👥</span>
+                    <h4>Tra cứu lớp</h4>
+                    <p>Xem bảng xếp hạng cả lớp tại đây</p>
+                </div>
+            </div>
+
+            <!-- Screen: TKB -->
+            <div class="pill-screen" id="pill-tkb" style="display:none;">
+                <div class="placeholder-box">
+                    <span class="emoji">📅</span>
+                    <h4>Thời khóa biểu</h4>
+                    <p>Xem TKB tuần này tại đây</p>
+                </div>
+            </div>
+
+            <!-- Screen: Lịch -->
+            <div class="pill-screen" id="pill-schedule" style="display:none;">
+                <div class="placeholder-box">
+                    <span class="emoji">🔔</span>
+                    <h4>Lịch thông báo</h4>
+                    <p>Các thông báo và deadline tại đây</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ SCREEN: NHẬP LIỆU ============ -->
+        <div class="screen" id="screen-input">
+            <div class="content-card">
+                <div class="card-head">
+                    <div class="card-head-icon" style="background:linear-gradient(135deg,#f472b6,#ec4899);">📋</div>
+                    <div class="card-head-text">
+                        <h3>Nhập liệu điểm</h3>
+                        <p>Chấm điểm thành viên trong tổ</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📅 Chọn tuần</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">📅</span>
+                        <select>
+                            <option>Tuần 3</option>
+                            <option>Tuần 4</option>
+                            <option>Tuần 5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🔑 Mật khẩu tổ</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" placeholder="Nhập mật khẩu...">
+                    </div>
+                </div>
+
+                <button class="btn btn-pink">✓ XÁC NHẬN & CHẤM ĐIỂM</button>
+            </div>
+        </div>
+
+        <!-- ============ SCREEN: QUẢN TRỊ ============ -->
+        <div class="screen" id="screen-admin">
+            <div class="content-card">
+                <div class="card-head">
+                    <div class="card-head-icon">🛡️</div>
+                    <div class="card-head-text">
+                        <h3>Khu vực quản trị</h3>
+                        <p>Dành riêng cho GVCN</p>
+                    </div>
+                </div>
+
+                <div style="background:#fef3c7;border:1.5px solid #f59e0b;border-radius:10px;padding:12px;margin-bottom:14px;font-size:0.8rem;color:#92400e;line-height:1.5;">
+                    <strong>⚠️ Yêu cầu đăng nhập GVCN</strong><br>
+                    Vui lòng nhập mật khẩu để truy cập.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🔑 Mật khẩu GVCN</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" placeholder="Nhập mật khẩu...">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary">→ ĐĂNG NHẬP</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="app-footer">
+        Bản quyền © Cô Trịnh Ngọc Ánh — THPT Tân Yên số 2
+    </footer>
 
 </div>
 
 <script>
-    // Dữ liệu mẫu
-    const STUDENTS = [
-        "Nguyễn Huyền Anh", "Hoàng Trung Hiếu", "Dương Ngọc Nhi", "Dương Ngọc Sơn", "Lê Minh Công",
-        "Nguyễn Thị Huyền Trang", "Dương Nguyễn Phương Anh", "Triệu Gia Bảo", "Nguyễn Duy Biên",
-        "Nguyễn Văn Dũng", "Nguyễn Văn Duy", "Tạ Văn Duy", "Nguyễn Văn Đồng", "Tạ Trung Đức",
-        "Hoàng Thị Thu Hằng", "Nguyễn Thị Thu Hiền", "Giáp Thị Ngọc Huệ", "Lê Ngọc Huy",
-        "Nguyễn Thị Khánh Huyền", "Lê Ngọc Khánh", "Dương Anh Linh", "Phạm Khánh Linh",
-        "Lê Thị Quỳnh Mai", "Thân Đức Mạnh", "Lê Thị Phương Minh", "Giáp Thị Trà My",
-        "Nguyễn Hoàng My", "Nguyễn Hoàng Vân Ngọc", "Thân Thị Tuyết Nhung", "Nguyễn Thị Hồng Nhung",
-        "Ninh Nguyễn Diệu Oanh", "Dương Thanh Phong", "Đàm Tuấn Phong", "Nguyễn Hồng Phong",
-        "Nguyễn Đăng Thiên Phú", "Nguyễn Đức Quảng", "Nguyễn Danh Sinh", "Nguyễn Đình Thanh",
-        "Chu Hoài Thương", "Nguyễn Việt Tiến", "Lâm Thị Trang", "Đoàn Thị Quỳnh Trang",
-        "Thân Thị Ánh Tuyết", "Giáp Lâm Vũ", "Chúc Thị Phương Anh"
-    ];
+function switchTab(tabName, el) {
+    document.querySelectorAll('.tab-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + tabName).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    // Chức vụ của 1 số HS
-    const POSITIONS = {
-        1: 'Lớp trưởng',
-        5: 'Tổ trưởng',
-        8: 'Bí thư',
-        11: 'Tổ trưởng',
-        17: 'Sao đỏ',
-        20: 'Tổ trưởng',
-        34: 'Tổ trưởng'
-    };
+function switchPill(screenName, el) {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.pill-screen').forEach(s => s.style.display = 'none');
+    document.getElementById('pill-' + screenName).style.display = 'block';
+}
 
-    // Sơ đồ 4 cột (mặc định)
-    const COLS_4x12 = {
-        1: [1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45],
-        2: [2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46],
-        3: [3, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47],
-        4: [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48]
-    };
+function doLookup() {
+    document.getElementById('emptyLookup').style.display = 'none';
+    document.getElementById('lookupResult').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('lookupResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
 
-    let currentMode = '4col';
-
-    function setMode(mode) {
-        currentMode = mode;
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-        render();
-    }
-
-    function getRoleClass(role) {
-        if (role === 'Lớp trưởng' || role === 'Bí thư') return 'bt';
-        if (role === 'Lớp phó') return 'lp';
-        if (role === 'Tổ trưởng') return 'tt';
-        if (role === 'Sao đỏ' || role === 'Giữ SĐB') return 'sd';
-        return '';
-    }
-
-    function renderSeat(stt) {
-        if (!stt) {
-            return '<div class="seat-box empty"><div class="seat-name">Trống</div></div>';
-        }
-        const name = STUDENTS[stt - 1] || '';
-        const role = POSITIONS[stt] || '';
-        const roleClass = getRoleClass(role);
-        const badge = role ? `<div class="role-badge ${roleClass}">${role}</div>` : '';
-        return `<div class="seat-box">${badge}<div class="seat-name">${name}</div></div>`;
-    }
-
-    function renderCol(title, cls, positions) {
-        let seats = '';
-        for (let i = 0; i < positions.length; i += 2) {
-            seats += '<div class="seat-row">';
-            seats += renderSeat(positions[i]);
-            if (positions[i + 1]) seats += renderSeat(positions[i + 1]);
-            seats += '</div>';
-        }
-        return `<div class="col-group ${cls}">
-            <div class="group-title">${title}</div>
-            ${seats}
-        </div>`;
-    }
-
-    function render() {
-        const grid = document.getElementById('seatingGrid');
-        if (currentMode === '4col') {
-            // 4 cột dọc như cũ
-            let html = '';
-            for (let c = 1; c <= 4; c++) {
-                html += renderCol('Tổ ' + c, 'group-tto-' + c, COLS_4x12[c]);
-            }
-            grid.innerHTML = html;
-        } else {
-            // 2x2 — gộp 2 tổ thành 1 khối lớn để tự nhiên wrap
-            let html = '';
-            for (let c = 1; c <= 4; c++) {
-                html += renderCol('Tổ ' + c, 'group-tto-' + c, COLS_4x12[c]);
-            }
-            grid.innerHTML = html;
-        }
-    }
-
-    render();
+function closeLookup() {
+    document.getElementById('lookupResult').style.display = 'none';
+    document.getElementById('emptyLookup').style.display = 'block';
+}
 </script>
+
 </body>
 </html>
